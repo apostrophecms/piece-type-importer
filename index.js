@@ -4,7 +4,16 @@ module.exports = {
     add: {
       import: {
         route: '/import',
-        label: 'apostrophe:importPieces'
+        label: 'apostrophe:importPieces',
+        modalOptions: {
+          title: 'apostrophe:importPieces',
+          description: 'apostrophe:importPiecesDescription',
+          confirmationButton: 'apostrophe:import',
+          modal: 'AposImportPieces'
+        },
+        requestOptions: {
+          extension: 'csv'
+        }
       }
     }
   },
@@ -42,7 +51,6 @@ module.exports = {
 
               await self.importRun(req, file);
             } catch (err) {
-              console.error('err ===> ', err);
             }
             // return self.apos.modules['@apostrophecms/job'].runNonBatch(
             //   req,

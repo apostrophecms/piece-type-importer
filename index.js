@@ -1,6 +1,3 @@
-const stringify = require('csv-stringify');
-const fs = require('fs');
-
 module.exports = {
   improve: '@apostrophecms/piece-type',
   utilityOperations: {
@@ -12,27 +9,15 @@ module.exports = {
     }
   },
   init (self) {
-    self.exportFormats = {
+    self.importFormats = {
       csv: {
         label: 'CSV (comma-separated values)',
-        output: function (filename) {
-          const out = stringify({ header: true });
-          out.pipe(fs.createWriteStream(filename));
-          return out;
+        input (filename) {
+          // const out = stringify({ header: true });
+          // out.pipe(fs.createWriteStream(filename));
+          // return out;
         }
       },
-      tsv: {
-        label: 'TSV (tab-separated values)',
-        output: function (filename) {
-          const out = stringify({
-            header: true,
-            delimiter: '\t'
-          });
-          out.pipe(fs.createWriteStream(filename));
-          return out;
-        }
-      },
-      xlsx: require('./lib/excel.js')(self),
       ...(self.options.exportFormats || {})
     };
   },
@@ -44,9 +29,30 @@ module.exports = {
   apiRoutes (self) {
     return {
       post: {
-        import (req) {
+        import: [
+          // self.canUpload,
+          require('connect-multiparty')(),
+          async function (req) {
+            try {
 
-        }
+              const { file } = req.files || {};
+              if (!file) {
+                throw self.apos.error('invalid');
+              }
+
+              await self.importRun(req, file);
+            } catch (err) {
+              console.error('err ===> ', err);
+            }
+            // return self.apos.modules['@apostrophecms/job'].runNonBatch(
+            //   req,
+            //   function (req, reporting) {
+            //     return self.importRun(file);
+            //   },
+            //   {}
+            // );
+          }
+        ]
       }
     };
   }

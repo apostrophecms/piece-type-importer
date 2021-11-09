@@ -1,0 +1,16 @@
+{
+  "extends": [ "apostrophe" ],
+  "rules": {
+    "no-var": "error"
+  },
+  "overrides": [
+    {
+      "files": [
+        "**/ui/**/*.js"
+      ],
+      "globals": {
+        "apos": true
+      }
+    }
+  ]
+}

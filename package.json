@@ -24,6 +24,7 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.1",
+    "eslint-plugin-vue": "^7.9.0",
     "mocha": "^7.1.2",
     "stylelint": "^13.7.1",
     "stylelint-config-apostrophe": "^1.0.0"

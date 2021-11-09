@@ -1,7 +1,11 @@
 {
   "extends": [ "apostrophe" ],
   "rules": {
-    "no-var": "error"
+    "no-var": "error",
+    "no-unused-vars": [
+      "error",
+      { "varsIgnorePattern": "^_", "args": "none" }
+    ]
   },
   "overrides": [
     {

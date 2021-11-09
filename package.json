@@ -29,6 +29,7 @@
     "stylelint-config-apostrophe": "^1.0.0"
   },
   "dependencies": {
+    "csv-parse": "^4.16.3",
     "csv-stringify": "^5.6.5",
     "xlsx": "^0.17.3"
   }

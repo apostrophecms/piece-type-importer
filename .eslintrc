@@ -4,7 +4,7 @@
     "no-var": "error",
     "no-unused-vars": [
       "error",
-      { "varsIgnorePattern": "^_", "args": "none" }
+      { "varsIgnorePattern": "^_.", "args": "none" }
     ]
   },
   "globals": {

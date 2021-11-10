@@ -1,24 +1,28 @@
 module.exports = {
   improve: '@apostrophecms/piece-type',
-  utilityOperations: {
-    add: {
-      import: {
-        route: '/import',
-        label: 'Import {{ type }}',
-        modalOptions: {
-          title: 'Import {{ type }}',
-          description: 'Importing pieces requires a csv file with matching properties.',
-          confirmationButton: 'Import',
-          modal: 'AposImportPieces'
-        },
-        messages: {
-          progress: 'Importing {{ type }}...'
-        },
-        requestOptions: {
-          extension: 'csv'
+  utilityOperations (self) {
+    return self.options.import
+      ? {
+        add: {
+          import: {
+            route: '/import',
+            label: 'Import {{ type }}',
+            modalOptions: {
+              title: 'Import {{ type }}',
+              description: 'Importing pieces requires a csv file with matching properties.',
+              confirmationButton: 'Import',
+              modal: 'AposImportPieces'
+            },
+            messages: {
+              progress: 'Importing {{ type }}...'
+            },
+            requestOptions: {
+              extension: 'csv'
+            }
+          }
         }
-      }
-    }
+      } : {};
+
   },
   init (self) {
     self.importFormats = {

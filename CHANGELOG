@@ -1,3 +1,4 @@
 # Changelog
 
 ## 1.0.0
+* Setup module, adds pieces import feature for csv files, based on the `piece-type-exporter` module. It uses the A3 job system.

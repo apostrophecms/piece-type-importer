@@ -8,7 +8,7 @@
       <AposModalBody>
         <template #bodyMain>
           <AposLogoIcon
-            class="apos-confirm__logo"
+            class="apos-import__logo"
           />
           <h2
             v-if="title"
@@ -23,19 +23,19 @@
             {{ $t(description) }}
           </p>
           <AposFile
+            class="apos-import__file"
             allowed-extensions=".csv"
             @upload-file="uploadImportFile"
             @update="updateImportFile"
           />
-          <div class="apos-confirm__btns">
+          <div class="apos-import__btns">
             <AposButton
-              class="apos-confirm__btn"
+              class="apos-import__btn"
               label="apostrophe:cancel"
               @click="cancel"
             />
             <AposButton
-              ref="confirm"
-              class="apos-confirm__btn"
+              class="apos-import__btn"
               :label="confirmationButton"
               :type="'primary'"
               :disabled="!selectedFile"
@@ -74,6 +74,10 @@ export default {
     labels: {
       type: Object,
       required: true
+    },
+    messages: {
+      type: Object,
+      default: null
     }
   },
   data () {
@@ -93,11 +97,11 @@ export default {
     this.modal.active = true;
   },
   methods: {
-    uploadImportFile ([ file ]) {
+    uploadImportFile (file) {
       this.selectedFile = file || null;
     },
-    updateImportFile ([ file ]) {
-      this.this.selectedFile = file || null;
+    updateImportFile () {
+      this.selectedFile = null;
     },
     cancel () {
       this.modal.active = false;
@@ -107,16 +111,24 @@ export default {
         const formData = new FormData();
         formData.append('file', this.selectedFile);
 
-        await apos.http.post(`${this.moduleOptions.action}${this.route}`, {
+        if (this.messages) {
+          Object.entries(this.messages).forEach(([ stage, message ]) => {
+            formData.append(stage, message);
+          });
+        }
+
+        this.selectedFile = null;
+
+        await apos.http.post(`${this.action}${this.route}`, {
           body: formData
         });
       } catch (error) {
         apos.notify('Import failed.', {
           type: 'danger'
         });
-      } finally {
-        this.selectedFile = null;
       }
+
+      this.modal.active = false;
     }
   }
 };
@@ -133,6 +145,27 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
+
+  &__logo {
+    height: 35px;
+    margin-bottom: $spacing-double;
+  }
+
+  &__heading {
+    @include type-title;
+    line-height: var(--a-line-tall);
+    margin: 0;
+  }
+
+  &__description {
+    @include type-base;
+    max-width: 370px;
+    line-height: var(--a-line-tallest);
+  }
+
+  &__file {
+    min-width: 370px;
+  }
 }
 
 ::v-deep .apos-modal__inner {
@@ -149,21 +182,5 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
-}
-.apos-confirm__logo {
-  height: 35px;
-  margin-bottom: $spacing-double;
-}
-
-.apos-import__heading {
-  @include type-title;
-  line-height: var(--a-line-tall);
-  margin: 0;
-}
-
-.apos-import__description {
-  @include type-base;
-  max-width: 370px;
-  line-height: var(--a-line-tallest);
 }
 </style>

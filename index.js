@@ -4,12 +4,15 @@ module.exports = {
     add: {
       import: {
         route: '/import',
-        label: 'apostrophe:importPieces',
+        label: 'Import {{ type }}',
         modalOptions: {
-          title: 'apostrophe:importPieces',
-          description: 'apostrophe:importPiecesDescription',
-          confirmationButton: 'apostrophe:import',
+          title: 'Import {{ type }}',
+          description: 'Importing pieces requires a csv file with matching properties.',
+          confirmationButton: 'Import',
           modal: 'AposImportPieces'
+        },
+        messages: {
+          progress: 'Importing {{ type }}...'
         },
         requestOptions: {
           extension: 'csv'
@@ -20,12 +23,7 @@ module.exports = {
   init (self) {
     self.importFormats = {
       csv: {
-        label: 'CSV (comma-separated values)',
-        input (filename) {
-          // const out = stringify({ header: true });
-          // out.pipe(fs.createWriteStream(filename));
-          // return out;
-        }
+        label: 'CSV (comma-separated values)'
       },
       ...(self.options.exportFormats || {})
     };
@@ -42,23 +40,29 @@ module.exports = {
           // self.canUpload,
           require('connect-multiparty')(),
           async function (req) {
-            try {
-
-              const { file } = req.files || {};
-              if (!file) {
-                throw self.apos.error('invalid');
-              }
-
-              await self.importRun(req, file);
-            } catch (err) {
+            const { file } = req.files || {};
+            if (!file) {
+              throw self.apos.error('invalid');
             }
-            // return self.apos.modules['@apostrophecms/job'].runNonBatch(
-            //   req,
-            //   function (req, reporting) {
-            //     return self.importRun(file);
-            //   },
-            //   {}
-            // );
+
+            const extension = file.name.split('.').pop();
+
+            if (!self.exportFormats[extension]) {
+              throw self.apos.error('invalid');
+            }
+
+            const fileLinesCount = await self.countFileLines(file.path);
+
+            req.body = { messages: req.body };
+
+            return self.apos.modules['@apostrophecms/job'].run(
+              req,
+              (req, reporting) => self.importRun(req, reporting, {
+                file,
+                fileLinesCount
+              }),
+              {}
+            );
           }
         ]
       }

@@ -4,8 +4,9 @@
   "description": "An Apostrophe 3 module to support importing pieces",
   "main": "index.js",
   "scripts": {
-    "lint": "npm run eslint",
+    "lint": "npm run eslint && npm run sylelint",
     "eslint": "eslint .",
+    "sylelint": "stylelint **/*.{css,scss,vue}",
     "test": "npm audit --production && npm run lint && mocha"
   },
   "repository": {
@@ -30,8 +31,6 @@
     "stylelint-config-apostrophe": "^1.0.0"
   },
   "dependencies": {
-    "csv-parse": "^4.16.3",
-    "csv-stringify": "^5.6.5",
-    "xlsx": "^0.17.3"
+    "csv-parse": "^4.16.3"
   }
 }

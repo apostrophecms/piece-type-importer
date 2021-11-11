@@ -5,7 +5,7 @@ module.exports = {
       ? {
         add: {
           import: {
-            route: '/import',
+            route: 'import',
             label: 'Import {{ type }}',
             modalOptions: {
               title: 'Import {{ type }}',
@@ -29,7 +29,7 @@ module.exports = {
       csv: {
         label: 'CSV (comma-separated values)'
       },
-      ...(self.options.exportFormats || {})
+      ...(self.options.importFormats || {})
     };
   },
   methods (self) {
@@ -51,11 +51,20 @@ module.exports = {
 
             const extension = file.name.split('.').pop();
 
-            if (!self.exportFormats[extension]) {
+            if (!self.importFormats[extension]) {
               throw self.apos.error('invalid');
             }
 
-            const fileLinesCount = await self.countFileLines(file.path);
+            const [ pieces, parsingErr ] = await self.parseCsvFile(file.path);
+
+            if (parsingErr) {
+              await self.stopProcess(req, {
+                message: parsingErr.message,
+                filePath: file.path
+              });
+
+              throw self.apos.error('invalid');
+            }
 
             req.body = { messages: req.body };
 
@@ -63,7 +72,7 @@ module.exports = {
               req,
               (req, reporting) => self.importRun(req, reporting, {
                 file,
-                fileLinesCount
+                pieces
               }),
               {}
             );

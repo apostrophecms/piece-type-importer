@@ -47,3 +47,9 @@ module.exports = {
   // Other properties...
 }
 ```
+
+## Roadmap
+
+|Feature |Status  |
+--- | ---
+|Create mixin to define standard props for modals used in the context of utility operations| TODO

@@ -41,7 +41,6 @@ module.exports = {
     return {
       post: {
         import: [
-          // self.canUpload,
           require('connect-multiparty')(),
           async function (req) {
             const { file } = req.files || {};

@@ -3,7 +3,7 @@
 
 # Apostrophe Pieces Importer
 
-This module adds an optional import feature to all piece type modules in an [Apostrophe](https://apostrophecms.com) project. This feature enables importing *published* pieces of piece types from csv files where it is configured. Requires Apostrophe 3.
+This module adds an optional import feature to all piece type modules in an [Apostrophe](https://apostrophecms.com) project. This feature enables importing pieces from CSV files where it is configured. Requires Apostrophe 3.
 
 ## Installation
 
@@ -15,7 +15,7 @@ npm install @apostrophecms/piece-type-importer
 
 ### Initialization
 
-Configure `@apostrophecms/piece-type-importer` and the form widgets in `app.js`.
+Enable `@apostrophecms/piece-type-importer` in `app.js`.
 
 ```javascript
 require('apostrophe')({
@@ -23,11 +23,8 @@ require('apostrophe')({
   modules: {
     // The Importer module
     '@apostrophecms/piece-type-importer': {},
-    // A piece type that allows imports
-    'article': {
-      options: {
-        import: true
-      }
+    // A piece type that allows imports (see below)
+    'article': {}
     }
   }
 });

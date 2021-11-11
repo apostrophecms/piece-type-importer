@@ -3,7 +3,7 @@
 
 # Apostrophe Pieces Importer
 
-This module adds an optional export feature to all piece type modules in an [Apostrophe](https://apostrophecms.com) project. This feature enables exporting *published* pieces of piece types where it is configured. Requires Apostrophe 3.
+This module adds an optional import feature to all piece type modules in an [Apostrophe](https://apostrophecms.com) project. This feature enables importing *published* pieces of piece types from csv files where it is configured. Requires Apostrophe 3.
 
 ## Installation
 

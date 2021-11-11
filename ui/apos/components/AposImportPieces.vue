@@ -119,7 +119,7 @@ export default {
 
         this.selectedFile = null;
 
-        await apos.http.post(`${this.action}${this.route}`, {
+        await apos.http.post(`${this.action}/${this.route}`, {
           body: formData
         });
       } catch (error) {
@@ -153,18 +153,32 @@ export default {
 
   &__heading {
     @include type-title;
+
     line-height: var(--a-line-tall);
     margin: 0;
   }
 
   &__description {
     @include type-base;
+
     max-width: 370px;
     line-height: var(--a-line-tallest);
   }
 
   &__file {
     min-width: 370px;
+  }
+
+  &__btns {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+  }
+
+  &__btn {
+    & + & {
+      margin-left: $spacing-double;
+    }
   }
 }
 

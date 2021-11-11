@@ -2,16 +2,18 @@ const assert = require('assert');
 const path = require('path');
 const testUtil = require('apostrophe/test-lib/test');
 
-describe('Pieces Importer', () => {
+describe('Pieces Importer', function () {
   let apos;
 
   after(async () => {
     testUtil.destroy(apos);
   });
 
+  this.timeout(10000);
+
   it('should improve piece types on the apos object', async () => {
     apos = await testUtil.create({
-      shortname: 'test-exporter',
+      shortname: 'test-importer',
       testModule: true,
       modules: {
         '@apostrophecms/express': {

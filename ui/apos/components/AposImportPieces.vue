@@ -55,7 +55,7 @@ export default {
       type: String,
       required: true
     },
-    route: {
+    moduleAction: {
       type: String,
       required: true
     },
@@ -119,12 +119,13 @@ export default {
 
         this.selectedFile = null;
 
-        await apos.http.post(`${this.action}/${this.route}`, {
+        await apos.http.post(`${this.moduleAction}/${this.action}`, {
           body: formData
         });
       } catch (error) {
         apos.notify('Import failed.', {
-          type: 'danger'
+          type: 'danger',
+          dismiss: true
         });
       }
 

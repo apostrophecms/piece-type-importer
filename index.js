@@ -5,7 +5,6 @@ module.exports = {
       ? {
         add: {
           import: {
-            route: 'import',
             label: 'Import {{ type }}',
             modalOptions: {
               title: 'Import {{ type }}',
@@ -59,7 +58,8 @@ module.exports = {
             if (parsingErr) {
               await self.stopProcess(req, {
                 message: parsingErr.message,
-                filePath: file.path
+                filePath: file.path,
+                dismiss: false
               });
 
               throw self.apos.error('invalid');

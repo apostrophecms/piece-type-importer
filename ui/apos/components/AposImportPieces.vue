@@ -182,19 +182,21 @@ export default {
   }
 }
 
-::v-deep .apos-modal__inner {
-  top: auto;
-  right: auto;
-  bottom: auto;
-  left: auto;
-  max-width: 700px;
-  height: auto;
-  text-align: center;
-}
+::v-deep {
+  .apos-modal__inner {
+    top: auto;
+    right: auto;
+    bottom: auto;
+    left: auto;
+    max-width: 700px;
+    height: auto;
+    text-align: center;
+  }
 
-::v-deep .apos-modal__body-main {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  .apos-modal__body-main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
 }
 </style>

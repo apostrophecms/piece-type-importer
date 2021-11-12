@@ -1,0 +1,16 @@
+{
+  "extends": [ "apostrophe", "plugin:vue/vue3-recommended" ],
+  "globals": {
+    "apos": true
+  },
+  "overrides": [
+    {
+      "files": [
+        "**/ui/**/*.js"
+      ],
+      "globals": {
+        "apos": true
+      }
+    }
+  ]
+}

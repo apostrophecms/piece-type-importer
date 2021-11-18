@@ -181,8 +181,7 @@ describe('Pieces Importer', function () {
     const { imported, updated } = await self.importOrUpdatePieces(req, {
       pieces: piecesToImport,
       reporting,
-      updateField,
-      existingFields: Object.keys(pieces[0])
+      updateField
     });
 
     assert(imported === 0);

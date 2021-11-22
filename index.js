@@ -41,7 +41,9 @@ module.exports = {
         import: [
           require('connect-multiparty')(),
           async function (req) {
+            req.mode = 'draft';
             const { file } = req.files || {};
+
             if (!file) {
               throw self.apos.error('invalid');
             }

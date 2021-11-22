@@ -108,12 +108,12 @@ describe('Pieces Importer', function () {
       }
     };
 
-    const [ piecesToImport, convertErr ] = await self.convertPieces(req, { pieces: piecesFromCsv });
+    const convertErr = await self.checkForConvertErrors(req, { pieces: piecesFromCsv });
 
     assert(!convertErr.length);
 
     const { imported, updated } = await self.importOrUpdatePieces(req, {
-      pieces: piecesToImport,
+      pieces: piecesFromCsv,
       reporting
     });
 
@@ -132,9 +132,8 @@ describe('Pieces Importer', function () {
     assert(!parsingErr);
     assert(pieces.length === 3);
 
-    const [ piecesToImport, convertErr ] = await self.convertPieces(req, { pieces });
+    const convertErr = await self.checkForConvertErrors(req, { pieces });
 
-    assert(piecesToImport.length === 2);
     assert(convertErr.length === 1);
     assert(convertErr[0] === 'On line 3, field title is required');
   });
@@ -142,6 +141,7 @@ describe('Pieces Importer', function () {
   it('Should update existing pieces if a :key suffix is added to a field', async () => {
     const req = apos.task.getReq();
     const self = apos.modules.article;
+    req.mode = 'draft';
 
     let success = 0;
     let failures = 0;
@@ -162,24 +162,22 @@ describe('Pieces Importer', function () {
 
     const {
       updateKey, updateField, updateKeyErr
-    } = self
-      .checkIfUpdateKey(pieces[0], '');
+    } = self.checkIfUpdateKey(pieces[0]);
 
     assert(!updateKeyErr);
     assert(updateKey);
     assert(updateField);
 
-    const [ piecesToImport, convertErr ] = await self.convertPieces(req, {
+    const convertErr = await self.checkForConvertErrors(req, {
       pieces,
       updateField,
       updateKey
     });
 
     assert(!convertErr.length);
-    assert(piecesToImport.length === 3);
 
     const { imported, updated } = await self.importOrUpdatePieces(req, {
-      pieces: piecesToImport,
+      pieces: pieces,
       reporting,
       updateField
     });
@@ -189,7 +187,9 @@ describe('Pieces Importer', function () {
     assert(success === 3);
     assert(failures === 0);
 
-    const articles = await apos.doc.db.find({ _id: /:draft/ }).toArray();
+    const articles = await self.find(req, {
+      aposMode: 'draft'
+    }).toArray();
 
     articles.forEach((article) => {
       switch (article.title) {
@@ -208,7 +208,7 @@ describe('Pieces Importer', function () {
     });
   });
 
-  it('It should stop the update process if must than one field contains a :key suffix.', async () => {
+  it('It should stop the update process if more than one field contains a :key suffix.', async () => {
     const self = apos.modules.article;
 
     const [ pieces, parsingErr ] = await self.parseCsvFile(updateMultipleKeysPath);

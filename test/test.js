@@ -218,8 +218,7 @@ describe('Pieces Importer', function () {
 
     const {
       updateKeyErr
-    } = self
-      .checkIfUpdateKey(pieces[0], '');
+    } = self.checkIfUpdateKey(pieces[0]);
 
     assert(updateKeyErr);
   });

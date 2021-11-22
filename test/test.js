@@ -177,8 +177,9 @@ describe('Pieces Importer', function () {
     assert(!convertErr.length);
 
     const { imported, updated } = await self.importOrUpdatePieces(req, {
-      pieces: pieces,
+      pieces,
       reporting,
+      updateKey,
       updateField
     });
 

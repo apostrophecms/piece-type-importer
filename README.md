@@ -45,6 +45,26 @@ module.exports = {
 }
 ```
 
+## Updating existing pieces
+
+You can also update existing pieces via this module.
+
+To do that, you will need one (and only one) **key column** in your file. This column's name **must be exactly the name of the existing field** that uniquely identifies each row as an update of a specific existing piece, **followed by `:key`**.
+
+For instance, if you need to change the usernames of users in bulk, you might prepare a CSV file like this:
+
+```
+username:key,username
+bobsmith,bob.smith
+janedoe,jane.doe
+```
+
+The key column is the *old value*. You may optionally also present a *new value* for that same column in a separate column without `:key`. You may also include other columns, as you see fit. The important thing is that you must have one and only one `:key` column in order to carry out updates.
+
+## Mixing inserts and updates
+
+If a row has no value for your `:key` column, it is treated as an insert, rather than an update.
+
 ## Roadmap
 
 |Feature |Status  |

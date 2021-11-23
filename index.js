@@ -21,7 +21,6 @@ module.exports = {
           }
         }
       } : {};
-
   },
   init (self) {
     self.importFormats = {
@@ -42,7 +41,9 @@ module.exports = {
         import: [
           require('connect-multiparty')(),
           async function (req) {
+            req.mode = 'draft';
             const { file } = req.files || {};
+
             if (!file) {
               throw self.apos.error('invalid');
             }
@@ -53,10 +54,10 @@ module.exports = {
               throw self.apos.error('invalid');
             }
 
-            const [ pieces, parsingErr ] = await self.parseCsvFile(file.path);
+            const [ pieces, parsingErr ] = await self.importParseCsvFile(file.path);
 
             if (parsingErr) {
-              await self.stopProcess(req, {
+              await self.importStopProcess(req, {
                 message: parsingErr.message,
                 filePath: file.path,
                 dismiss: false

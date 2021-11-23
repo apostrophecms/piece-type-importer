@@ -64,7 +64,7 @@ describe('Pieces Importer', function () {
 
   let piecesFromCsv;
   it('Should get pieces from a csv file', async () => {
-    const [ pieces, parsingErr ] = await apos.modules.article.parseCsvFile(goodCsvPath);
+    const [ pieces, parsingErr ] = await apos.modules.article.importParseCsvFile(goodCsvPath);
 
     assert(pieces.length === 3);
 
@@ -85,7 +85,7 @@ describe('Pieces Importer', function () {
   });
 
   it('Should return an error if the csv file is badly formatted', async () => {
-    const [ pieces, parsingErr ] = await apos.modules.article.parseCsvFile(badCsvPath);
+    const [ pieces, parsingErr ] = await apos.modules.article.importParseCsvFile(badCsvPath);
 
     assert(!pieces);
     assert(parsingErr);
@@ -108,7 +108,7 @@ describe('Pieces Importer', function () {
       }
     };
 
-    const convertErr = await self.checkForConvertErrors(req, { pieces: piecesFromCsv });
+    const convertErr = await self.importCheckForConvertErrors(req, { pieces: piecesFromCsv });
 
     assert(!convertErr.length);
 
@@ -127,15 +127,15 @@ describe('Pieces Importer', function () {
     const req = apos.task.getReq();
     const self = apos.modules.article;
 
-    const [ pieces, parsingErr ] = await self.parseCsvFile(missingFieldsCsvPath);
+    const [ pieces, parsingErr ] = await self.importParseCsvFile(missingFieldsCsvPath);
 
     assert(!parsingErr);
     assert(pieces.length === 3);
 
-    const convertErr = await self.checkForConvertErrors(req, { pieces });
+    const convertErr = await self.importCheckForConvertErrors(req, { pieces });
 
     assert(convertErr.length === 1);
-    assert(convertErr[0] === 'On line 3, field title is required');
+    assert(convertErr[0] === 'On line 3, field title is required.');
   });
 
   it('Should update existing pieces if a :key suffix is added to a field', async () => {
@@ -155,20 +155,20 @@ describe('Pieces Importer', function () {
       }
     };
 
-    const [ pieces, parsingErr ] = await self.parseCsvFile(updateCsvPath);
+    const [ pieces, parsingErr ] = await self.importParseCsvFile(updateCsvPath);
 
     assert(!parsingErr);
     assert(pieces.length === 3);
 
     const {
       updateKey, updateField, updateKeyErr
-    } = self.checkIfUpdateKey(pieces[0]);
+    } = self.importCheckIfUpdateKey(pieces[0]);
 
     assert(!updateKeyErr);
     assert(updateKey);
     assert(updateField);
 
-    const convertErr = await self.checkForConvertErrors(req, {
+    const convertErr = await self.importCheckForConvertErrors(req, {
       pieces,
       updateField,
       updateKey
@@ -212,14 +212,14 @@ describe('Pieces Importer', function () {
   it('It should stop the update process if more than one field contains a :key suffix.', async () => {
     const self = apos.modules.article;
 
-    const [ pieces, parsingErr ] = await self.parseCsvFile(updateMultipleKeysPath);
+    const [ pieces, parsingErr ] = await self.importParseCsvFile(updateMultipleKeysPath);
 
     assert(!parsingErr);
     assert(pieces.length === 3);
 
     const {
       updateKeyErr
-    } = self.checkIfUpdateKey(pieces[0]);
+    } = self.importCheckIfUpdateKey(pieces[0]);
 
     assert(updateKeyErr);
   });

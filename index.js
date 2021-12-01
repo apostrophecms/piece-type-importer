@@ -70,7 +70,9 @@ module.exports = {
 
             return self.apos.modules['@apostrophecms/job'].run(
               req,
-              (req, reporting) => self.importRun(req, reporting, {
+              (req, reporting, notification) => self.importRun(req, {
+                reporting,
+                notification,
                 file,
                 pieces
               }),

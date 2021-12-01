@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+* Gets the progress notification from the `run` method, uses it to dismiss the progress notification if needed (early errors).
+
 ## 1.0.0-beta
 
 * Setup module, adds pieces import feature for CSV files, based on the `piece-type-exporter` module. It uses the A3 job system.

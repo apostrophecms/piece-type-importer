@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 1.0.0-beta.1 - 2021-12-08
 
 * Gets the progress notification ID from the `run` method, uses it to dismiss the progress notification if needed (early errors).
 

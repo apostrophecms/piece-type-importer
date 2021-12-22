@@ -54,19 +54,7 @@ module.exports = {
               throw self.apos.error('invalid');
             }
 
-            // const [ pieces, parsingErr ] = await self.importParseCsvFile(file.path);
-
             const totalPieces = await self.countFileLines(file.path);
-
-            // if (parsingErr) {
-            //   await self.importStopProcess(req, {
-            //     message: parsingErr.message,
-            //     filePath: file.path,
-            //     dismiss: false
-            //   });
-
-            //   throw self.apos.error('invalid');
-            // }
 
             req.body = { messages: req.body };
 
@@ -74,8 +62,8 @@ module.exports = {
               req,
               (req, reporting, { notificationId }) => self.importRun(req, {
                 progressNotifId: notificationId,
+                filePath: file.path,
                 reporting,
-                file,
                 totalPieces
               }),
               {}

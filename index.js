@@ -54,7 +54,7 @@ module.exports = {
               throw self.apos.error('invalid');
             }
 
-            const totalPieces = await self.countFileLines(file.path);
+            const totalPieces = await self.importCountFileLines(file.path);
 
             req.body = { messages: req.body };
 

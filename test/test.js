@@ -9,6 +9,8 @@ describe('Pieces Importer', function () {
   const updateCsvPath = path.join(process.cwd(), 'test/data/csv/updateArticles.csv');
   const updateMultipleKeysPath = path.join(process.cwd(), 'test/data/csv/updateMultipleKeysArtices.csv');
 
+  this.timeout(10000);
+
   let apos, self, req;
 
   let success, failures, reporting;

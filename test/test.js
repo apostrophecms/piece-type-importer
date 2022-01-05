@@ -9,13 +9,26 @@ describe('Pieces Importer', function () {
   const updateCsvPath = path.join(process.cwd(), 'test/data/csv/updateArticles.csv');
   const updateMultipleKeysPath = path.join(process.cwd(), 'test/data/csv/updateMultipleKeysArtices.csv');
 
-  let apos;
+  let apos, self, req;
 
-  after(async () => {
-    testUtil.destroy(apos);
+  let success, failures, reporting;
+  beforeEach(async () => {
+    success = 0;
+    failures = 0;
+
+    reporting = {
+      success: () => {
+        success++;
+      },
+      failure: () => {
+        failures++;
+      }
+    };
   });
 
-  this.timeout(10000);
+  after(() => {
+    testUtil.destroy(apos);
+  });
 
   it('Should improve piece types on the apos object', async () => {
     apos = await testUtil.create({
@@ -56,135 +69,79 @@ describe('Pieces Importer', function () {
       }
     });
 
-    const articleModule = apos.modules.article;
+    self = apos.modules.article;
+    req = apos.task.getReq();
 
-    assert(articleModule.__meta.name === 'article');
-    assert(articleModule.options.import === true);
+    assert(self.__meta.name === 'article');
+    assert(self.options.import === true);
   });
 
-  let piecesFromCsv;
-  it('Should get pieces from a csv file', async () => {
-    const [ pieces, parsingErr ] = await apos.modules.article.importParseCsvFile(goodCsvPath);
+  it('Should count the items of a csv file', async () => {
+    const totalPieces = await self.importCountFileLines(goodCsvPath);
 
-    assert(pieces.length === 3);
-
-    piecesFromCsv = pieces;
-
-    const [ article1, article2, article3 ] = pieces;
-
-    assert(!parsingErr);
-
-    assert(article1.title === 'Article 1');
-    assert(article1.category === 'book');
-
-    assert(article2.title === 'Article 2');
-    assert(article2.category === 'film');
-
-    assert(article3.title === 'Article 3');
-    assert(article3.category === 'toy');
+    assert(totalPieces === 3);
   });
 
   it('Should return an error if the csv file is badly formatted', async () => {
-    const [ pieces, parsingErr ] = await apos.modules.article.importParseCsvFile(badCsvPath);
-
-    assert(!pieces);
-    assert(parsingErr);
-    assert(parsingErr.message === 'Invalid Record Length: columns length is 2, got 5 on line 2');
-  });
-
-  it('Should convert and insert pieces from the read file', async () => {
-    const req = apos.task.getReq();
-    const self = apos.modules.article;
-
-    let success = 0;
-    let failures = 0;
-
-    const reporting = {
-      success: function () {
-        success++;
-      },
-      failure: function () {
-        failures++;
-      }
-    };
-
-    const convertErr = await self.importCheckForConvertErrors(req, { pieces: piecesFromCsv });
-
-    assert(!convertErr.length);
-
-    const { imported, updated } = await self.importOrUpdatePieces(req, {
-      pieces: piecesFromCsv,
+    const {
+      processedErr
+    } = await self.importProcessStream(req, {
+      filePath: badCsvPath,
       reporting
     });
 
+    assert(processedErr === 'Invalid Record Length: columns length is 2, got 5 on line 2');
+  });
+
+  it('Should convert and insert pieces from the read file', async () => {
+    const {
+      imported, updated, failed, errors, processedErr
+    } = await self.importProcessStream(req, {
+      filePath: goodCsvPath,
+      reporting
+    });
+
+    assert(!errors.length);
+    assert(!processedErr);
     assert(imported === 3);
     assert(updated === 0);
+    assert(failed === 0);
     assert(success === 3);
     assert(failures === 0);
   });
 
-  it('Should fail to insert pieces if some cannot be converted', async () => {
-    const req = apos.task.getReq();
-    const self = apos.modules.article;
-
-    const [ pieces, parsingErr ] = await self.importParseCsvFile(missingFieldsCsvPath);
-
-    assert(!parsingErr);
-    assert(pieces.length === 3);
-
-    const convertErr = await self.importCheckForConvertErrors(req, { pieces });
-
-    assert(convertErr.length === 1);
-    assert(convertErr[0] === 'On line 3, field title is required.');
-  });
-
-  it('Should update existing pieces if a :key suffix is added to a field', async () => {
-    const req = apos.task.getReq();
-    const self = apos.modules.article;
-    req.mode = 'draft';
-
-    let success = 0;
-    let failures = 0;
-
-    const reporting = {
-      success: function () {
-        success++;
-      },
-      failure: function () {
-        failures++;
-      }
-    };
-
-    const [ pieces, parsingErr ] = await self.importParseCsvFile(updateCsvPath);
-
-    assert(!parsingErr);
-    assert(pieces.length === 3);
-
+  it('Should fail to insert pieces if they cannot be converted', async () => {
     const {
-      updateKey, updateField, updateKeyErr
-    } = self.importCheckIfUpdateKey(pieces[0]);
-
-    assert(!updateKeyErr);
-    assert(updateKey);
-    assert(updateField);
-
-    const convertErr = await self.importCheckForConvertErrors(req, {
-      pieces,
-      updateField,
-      updateKey
-    });
-
-    assert(!convertErr.length);
-
-    const { imported, updated } = await self.importOrUpdatePieces(req, {
-      pieces,
-      reporting,
-      updateKey,
-      updateField
+      imported, updated, failed, errors, processedErr
+    } = await self.importProcessStream(req, {
+      filePath: missingFieldsCsvPath,
+      reporting
     });
 
     assert(imported === 0);
+    assert(updated === 0);
+    assert(failed === 3);
+    assert(!processedErr);
+    assert(errors[0] === 'On line 2, field title is required.');
+    assert(errors[1] === 'On line 3, field title is required.');
+    assert(errors[2] === 'On line 4, field title is required.');
+  });
+
+  it('Should update existing pieces if a :key suffix is added to a field', async () => {
+    req.mode = 'draft';
+
+    const {
+      imported, updated, failed, errors, processedErr
+    } = await self.importProcessStream(req, {
+      filePath: updateCsvPath,
+      reporting
+    });
+
+    assert(!processedErr);
+    assert(!errors.length);
+    assert(imported === 0);
     assert(updated === 3);
+    assert(failed === 0);
     assert(success === 3);
     assert(failures === 0);
 
@@ -207,20 +164,19 @@ describe('Pieces Importer', function () {
           break;
       }
     });
+
+    req.mode = 'published';
   });
 
   it('It should stop the update process if more than one field contains a :key suffix.', async () => {
-    const self = apos.modules.article;
-
-    const [ pieces, parsingErr ] = await self.importParseCsvFile(updateMultipleKeysPath);
-
-    assert(!parsingErr);
-    assert(pieces.length === 3);
-
     const {
-      updateKeyErr
-    } = self.importCheckIfUpdateKey(pieces[0]);
+      processedErr
+    } = await self.importProcessStream(req, {
+      filePath: updateMultipleKeysPath,
+      reporting
+    });
 
-    assert(updateKeyErr);
+    assert(processedErr);
+    assert(processedErr === 'You can have only one key column for updates.');
   });
 });

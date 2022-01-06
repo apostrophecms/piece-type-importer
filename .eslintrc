@@ -3,6 +3,9 @@
   "globals": {
     "apos": true
   },
+  "env": {
+    "mocha": true
+  },
   "overrides": [
     {
       "files": [

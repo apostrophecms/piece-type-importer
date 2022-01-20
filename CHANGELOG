@@ -1,8 +1,8 @@
 # Changelog
 
-## Unrealesed
+## 1.0.0 - 2022-01-21
 
-* Performs imports and updates through the stream, piece by piece to avoid overloading the RAM.
+* Performs streaming imports to avoid excessive RAM use.
 
 ## 1.0.0-beta.1 - 2021-12-08
 

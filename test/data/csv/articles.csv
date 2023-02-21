@@ -1,4 +1,4 @@
-title,category
-Article 1,book
-Article 2,film
-Article 3,toy
+title,category,textContent
+Article 1,book,<strong>Best books</strong>
+Article 2,film,Movies about cats
+Article 3,toy,<h4><i>Best</i> presents</h4>

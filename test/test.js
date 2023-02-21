@@ -64,6 +64,13 @@ describe('Pieces Importer', function () {
             add: {
               category: {
                 type: 'string'
+              },
+              textContent: {
+                type: 'area',
+                importAsRichText: true,
+                options: {
+                  '@apostrophecms/rich-text': {}
+                }
               }
             }
           }
@@ -180,5 +187,24 @@ describe('Pieces Importer', function () {
 
     assert(processedErr);
     assert(processedErr === 'You can have only one key column for updates.');
+  });
+
+  it('If piece\'s schema has field with importAsRichText: true option, should convert html content to richText area', async () => {
+    const articles = await self.find(req).toArray();
+    articles.forEach((article) => {
+      switch (article.title) {
+        case 'Article 1':
+          assert(article.textContent.items[0].content === '&lt;strong&gt;Best books&lt;/strong&gt;');
+          break;
+
+        case 'Article 2':
+          assert(article.textContent.items[0].content === 'Movies about cats');
+          break;
+
+        case 'Article 3':
+          assert(article.textContent.items[0].content === '&lt;h4&gt;&lt;i&gt;Best&lt;/i&gt; presents&lt;/h4&gt;');
+          break;
+      }
+    });
   });
 });

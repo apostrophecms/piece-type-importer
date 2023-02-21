@@ -20,7 +20,8 @@ module.exports = {
             }
           }
         }
-      } : {};
+      }
+      : {};
   },
   init (self) {
     self.importFormats = {

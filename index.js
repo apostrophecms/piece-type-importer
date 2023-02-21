@@ -5,7 +5,7 @@ module.exports = {
       ? {
         add: {
           import: {
-            label: 'Import as {{ type }}',
+            label: 'Import {{ type }}',
             modalOptions: {
               title: 'Import {{ type }}',
               description: 'Importing pieces requires a csv file with matching properties.',

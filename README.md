@@ -65,6 +65,13 @@ The key column is the *old value*. You may optionally also present a *new value*
 
 If a row has no value for your `:key` column, it is treated as an insert, rather than an update.
 
+## Importing rich text (HTML) rather than plaintext
+
+By default, if you create a column in your CSV file for a field of type `area`, it will be imported as plaintext. Any special characters like `<` and `>` will be escaped so the user can see them. HTML is not supported.
+
+To import areas as rich text HTML markup, add the `importAsRichText: true` option to
+the `area` field in your schema.
+
 ## Roadmap
 
 |Feature |Status  |

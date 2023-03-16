@@ -1,5 +1,9 @@
 # Changelog
 
+## UNRELEASED
+
+* Add support for rich-text(HTML) import
+
 ## 1.0.0 - 2022-01-21
 
 * Performs streaming imports to avoid excessive RAM use.

@@ -1,5 +1,9 @@
 # Changelog
 
+## UNRELEASED
+
+* Change label to "Import from CSV" to avoid confusion with the new [`@apostrophecms/import-export`](https://github.com/apostrophecms/import-export) module.
+
 ## 1.1.1 - 2023-08-03
 
 * Strip the UTF-8 BOM from CSV files. Otherwise the name of the first column is not correctly parsed.

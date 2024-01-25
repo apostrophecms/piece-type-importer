@@ -1,6 +1,6 @@
 {
   "name": "@apostrophecms/piece-type-importer",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "An Apostrophe 3 module to support importing pieces",
   "main": "index.js",
   "scripts": {

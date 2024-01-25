@@ -1,6 +1,6 @@
 # Changelog
 
-## UNRELEASED
+## 1.1.2 (2024-01-25)
 
 * Change label to "Import from CSV" to avoid confusion with the new [`@apostrophecms/import-export`](https://github.com/apostrophecms/import-export) module.
 

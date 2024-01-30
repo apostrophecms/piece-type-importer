@@ -17,7 +17,8 @@ module.exports = {
             },
             requestOptions: {
               extension: 'csv'
-            }
+            },
+            canEdit: true
           }
         }
       }

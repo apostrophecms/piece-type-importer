@@ -18,6 +18,7 @@ module.exports = {
             requestOptions: {
               extension: 'csv'
             },
+            canCreate: true,
             canEdit: true
           }
         }

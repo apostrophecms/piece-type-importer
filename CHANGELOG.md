@@ -2,7 +2,7 @@
 
 ## UNRELEASED
 
-* Import now requires the edit permission.
+* Import now requires the create and edit permissions.
 
 ## 1.1.2 (2024-01-25)
 

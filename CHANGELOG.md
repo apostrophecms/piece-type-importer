@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.3.0 (2024-03-12)
+
+### Changes
+
+* Migrate to Vue 3.
+
 ## 1.2.0 (2024-02-21)
 
 * Import now requires the create and edit permissions.

@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.3.0 (2024-03-12)
+
+### Changes
+
+* Compatible with both Apostrophe 3.x and Apostrophe 4.x (both Vue 2 and Vue 3).
+
 ## 1.2.0 (2024-02-21)
 
 * Import now requires the create and edit permissions.

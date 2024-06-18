@@ -3,8 +3,7 @@
 
 # Apostrophe Pieces Importer
 
-> ⚠️ **NOTE:** This module is a deprecated version of the Import-Export module.  
-Please use [@apostrophecms/import-export](https://github.com/apostrophecms/import-export) instead.
+> ⚠️ **NOTE:** This module is deprecated, its functionality has been incorporated into [@apostrophecms/import-export](https://github.com/apostrophecms/import-export).
 
 This module adds an optional import feature to all piece type modules in an [Apostrophe](https://apostrophecms.com) project. This feature enables importing pieces from CSV files where it is configured. Requires Apostrophe 3.
 

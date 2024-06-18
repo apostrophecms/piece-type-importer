@@ -1,5 +1,9 @@
 # Changelog
 
+## UNRELEASED
+
+* Deprecate module.
+
 ## 1.3.0 (2024-03-12)
 
 ### Changes

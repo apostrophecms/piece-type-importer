@@ -1,6 +1,6 @@
 # Changelog
 
-## UNRELEASED
+## 1.4.0 (2024-07-10)
 
 * Deprecate module.
 
